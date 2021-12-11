@@ -1,25 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
+import * as C from './styles'
+import { useState } from 'react'
+import { FiSearch } from 'react-icons/fi'
+import api from './services/api'
 
-function App() {
+const App = () => {
+
+  const [input, setInput] = useState('');
+  const [cep, setCep] = useState({});
+
+  async function handleSearchCep() {
+    if (input === '') {
+      alert("Preencha algum cep..")
+      return;
+    }
+
+    try {
+      const response = await api.get(`${input}/json`)
+      for (let i in response.data) {
+        if (response.data[i] !== '') {
+          setCep(response.data)
+          setInput('')
+        }
+        else {
+          response.data[i] = 'Não encontrado'
+          setCep(response.data[i])
+          setInput('')
+        }
+      }
+    }
+    catch {
+      alert('Ops, erro ao buscar...')
+      setInput('')
+    }
+
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <C.Container>
+      
+      <C.ContainerTitle className="title">
+        Buscador de CEP
+      </C.ContainerTitle>
+      
+      <C.ContainerInput>
+        <input type="text"
+          placeholder="Digite aqui o CEP"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <FiSearch onClick={handleSearchCep} className="buttonSearch" size={20} color="FFF" />
+      </C.ContainerInput>
+
+      {Object.keys(cep).length > 0 && (
+        <C.MainArea>
+          <h2>Cep: {cep.cep}</h2>
+          <p>Rua: {cep.logradouro}</p>
+          <p>Complemento: {cep.complemento}</p>
+          <p>Bairro: {cep.bairro}</p>
+          <p>{cep.localidade} - {cep.uf}</p>
+        </C.MainArea>
+      )}
+    </C.Container>
+  )
 }
 
-export default App;
+export default App
