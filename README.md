@@ -1,6 +1,6 @@
 # BuscaCep
 
-### O objetivo dessa aplicação feita em React é realizar consultas de CEP do Brasil e retornar os dados do endereço correspondente, caso seja válido. 
+### Essa aplicação foi desenvolvid em ReactJS e tem como objetivo realizar consultas de CEP do Brasil e retornar os dados do endereço correspondente, caso seja válido. 
 
 # Realizando uma consulta
 
